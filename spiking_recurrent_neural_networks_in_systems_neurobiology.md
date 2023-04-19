@@ -12,6 +12,8 @@
 
 ## Other useful links
 
+* [Dr. Rajan lecture on RNNs](https://www.rajanlab.com/news/2021/2/26/kanaka-hosts-cosyne-tutorial-on-recurrent-neural-networks?rq=cosyne), a discussion about the dynamics of a spiking-recurrent neural network and how they can be useful in neuroscience.
+
 * [intro2ml](https://github.com/giacThePhantom/intro2ml/blob/master/build/Principal.pdf) An introduction to machine learning (in italian).
 
 * [Machine learning](https://github.com/giacThePhantom/DataMining/blob/master/build/principal.pdf) A more in-depth mathematical discussion of various machine learning methods.
