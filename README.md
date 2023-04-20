@@ -1,6 +1,6 @@
 # Resources and links for the presentation "Spiking recurrent neural networks in systems neurobiology"
 
-## Where to find
+## Presentation
 
 The notebook used to present the tool CURBD is the file [curbd_presentation.ipynb](https://github.com/giacThePhantom/CURBD/blob/master/curbd_presentation.ipynb)
 
