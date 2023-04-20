@@ -915,7 +915,7 @@ def plot_train_evolution(figure, subplots, chi2s, pvars, neuron_index, state, ex
                 label = 'simulated',
                 )
         subplots[0,2].legend()
-        subplots[0,2].set_ylim(0,1)
+        subplots[0,2].set_ylim(-1,1)
         plots['state'] = subplots[0, 0].imshow(state, aspect = 'auto')
         subplots[0, 1].imshow(experimental_data, aspect = 'auto')
         plots['chi2'], = subplots[1, 0].plot(chi2s)
@@ -1116,20 +1116,19 @@ Plotting the hitogram of values of $J$ in a specific sub-region allow to infer h
 
 import seaborn as sns
 
-sns.displot(J, hist=True, kde=True,
-             bins=200, color = 'darkblue',
-             hist_kws={'edgecolor':'black'},
-             kde_kws={'linewidth': 4})
 
 figure, subplot = plt.subplots(len(regions), len(regions), sharex = True, sharey = True)
 plt.suptitle("Before training")
 for (i, source) in enumerate(regions):
     for (j, target) in enumerate(regions):
-        subplot[i, j].hist(
-                J[regions[source], :][:, regions[target]].flatten(),
-                200,
-                density = True,
-                )
+        sns.distplot(J[regions[source], :][:, regions[target]],
+                     hist=True,
+                     kde=True,
+                     bins=200,
+                     color = 'darkblue',
+                     hist_kws={'edgecolor':'black'},
+                     kde_kws={'linewidth': 4},
+                        ax=subplot[i, j])
         subplot[i, j].set_title(f"{source} -> {target}")
         subplot[i, j].set_yscale('log')
 
@@ -1140,10 +1139,18 @@ figure, subplot = plt.subplots(len(regions), len(regions), sharex = True, sharey
 figure.suptitle("After training")
 for (i, source) in enumerate(regions):
     for (j, target) in enumerate(regions):
-        subplot[i, j].hist(
-                final_J[regions[source], :][:, regions[target]].flatten(),
-                200,
-                density = True,
-                )
+        sns.distplot(final_J[regions[source], :][:, regions[target]],
+                     hist=True,
+                     kde=True,
+                     bins=200,
+                     color = 'darkblue',
+                     hist_kws={'edgecolor':'black'},
+                     kde_kws={'linewidth': 4},
+                        ax=subplot[i, j])
         subplot[i, j].set_title(f"{source} -> {target}")
         subplot[i, j].set_yscale('log')
+subplots[2].plot(
+        np.arange(0, sim_param['sim_time'], sim_param['data_dt']),
+        experimental_data[random_neuron_index, :],
+        label = 'experimental'
+        )
