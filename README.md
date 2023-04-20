@@ -1,7 +1,25 @@
-This repo contains basic code to train multi-region data-constrained recurrent neural network (RNN) models and perform current-based decomposition (CURBD).
+# Resources and links for the presentation "Spiking recurrent neural networks in systems neurobiology"
 
-For details, see: Perich MG, Arit C, Soares S, Young ME, Mosher CP, Minxha J, Carter E, Rutishauser U, Rudebeck PH, Harvey CD, Rajan K. Inferring brain-wide interactions using data-constrained recurrent neural network models. bioRxiv. https://doi.org/10.1101/2020.12.18.423348
+## Where to find
 
-We provide both Matlab and Python implementations. Run CURBD_example in the language of choice to see a demo of RNN fitting and CURBD using simulated data.
+The notebook used to present the tool CURBD is the file [curbd_presentation.ipynb](https://github.com/giacThePhantom/CURBD/blob/master/curbd_presentation.ipynb)
 
-All software distributed under GNU GPL (see LICENSE.md).
+Which can be run locally via [Jupyter notebook](https://jupyter.org/) or on the cloud via [google's colab](https://colab.research.google.com/)
+
+## References
+
+* Matthew G. Perich, Charlotte Arlt, Sofia Soares, Megan E. Young, Clayton P. Mosher, Juri Minxha, Eugene Carter, Ueli Rutishauser, Peter H. Rudebeck, Christopher D. Harvey, Kanaka Rajan, Inferring brain-wide interactions using data-constrained recurrent neural network models,  bioRxiv 2020.12.18.423348; [doi](https://doi.org/10.1101/2020.12.18.423348)
+
+* Aaron S. Andalman, Vanessa M. Burns, Matthew Lovett-Barron, Michael Broxton, Ben Poole, Samuel J. Yang, Logan Grosenick, Talia N. Lerner, Ritchie Chen, Tyler Benster, Philippe Mourrain, Marc Levoy, Kanaka Rajan, Karl Deisseroth, Neuronal Dynamics Regulating Brain and Behavioral State Transitions, Cell, Volume 177, Issue 4, 2019, Pages 970-985.e20, ISSN 0092-8674, [doi](https://doi.org/10.1016/j.cell.2019.02.037), [link](https://www.sciencedirect.com/science/article/pii/S009286741930220X)
+
+* Xiangwen Wang, Xianghong Lin, Xiaochao Dang, Supervised learning in spiking neural networks: A review of algorithms and evaluations, Neural Networks, Volume 125, 2020, Pages 258-280, ISSN 0893-6080, [doi](https://doi.org/10.1016/j.neunet.2020.02.011), [link](https://www.sciencedirect.com/science/article/pii/S0893608020300563)
+
+## Other useful links
+
+* [Dr. Rajan lecture on RNNs](https://www.rajanlab.com/news/2021/2/26/kanaka-hosts-cosyne-tutorial-on-recurrent-neural-networks?rq=cosyne), a discussion about the dynamics of a spiking-recurrent neural network and how they can be useful in neuroscience.
+
+* [intro2ml](https://github.com/giacThePhantom/intro2ml/blob/master/build/Principal.pdf) An introduction to machine learning (in italian).
+
+* [Machine learning](https://github.com/giacThePhantom/DataMining/blob/master/build/principal.pdf) A more in-depth mathematical discussion of various machine learning methods.
+
+* [3Blue1Brown series](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi) A beautifully animated video introduction to neural networks.
