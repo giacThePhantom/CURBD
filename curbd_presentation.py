@@ -887,8 +887,16 @@ figure, subplots = plt.subplots(1, 3)
 subplots[0].imshow(test, aspect = 'auto')
 subplots[1].imshow(experimental_data, aspect = 'auto')
 random_neuron_index = npr.choice(target_neurons)
-subplots[2].plot(test[random_neuron_index, :], label = 'simulated')
-subplots[2].plot(experimental_data[random_neuron_index, :], label = 'experimental')
+subplots[2].plot(
+        np.arange(0, sim_param['sim_time'], sim_param['data_dt']),
+        experimental_data[random_neuron_index, :],
+        label = 'experimental'
+        )
+subplots[2].plot(
+        np.arange(0, sim_param['sim_time'], sim_param['dt']),
+        test[random_neuron_index, :],
+        label = 'simulated'
+        )
 
 # |%%--%%| <i7GbUE3XAW|54L3Vlhdwl>
 
@@ -907,7 +915,7 @@ def plot_train_evolution(figure, subplots, chi2s, pvars, neuron_index, state, ex
                 label = 'simulated',
                 )
         subplots[0,2].legend()
-        subplot[0,2].set_ylim(0,1)
+        subplots[0,2].set_ylim(0,1)
         plots['state'] = subplots[0, 0].imshow(state, aspect = 'auto')
         subplots[0, 1].imshow(experimental_data, aspect = 'auto')
         plots['chi2'], = subplots[1, 0].plot(chi2s)
@@ -916,9 +924,9 @@ def plot_train_evolution(figure, subplots, chi2s, pvars, neuron_index, state, ex
         subplots[1, 0].set_position([0.24,0.125,0.228,0.343])
         subplots[1, 1].set_position([0.55,0.125,0.228,0.343])
 
-    subplot[0,0].set_title("Simulated neurons activation")
-    subplot[0,1].set_title("Experimental neurons activation")
-    subplot[0,2].set_title("Neuron {}".format(neuron_index))
+    subplots[0,0].set_title("Simulated neurons activation")
+    subplots[0,1].set_title("Experimental neurons activation")
+    subplots[0,2].set_title("Neuron {}".format(neuron_index))
 
     plots['sim_neuron'].set_ydata(state[random_neuron_index, :])
     plots['exp_neuron'].set_ydata(experimental_data[random_neuron_index, :])
@@ -1105,6 +1113,13 @@ Plotting the hitogram of values of $J$ in a specific sub-region allow to infer h
 °°°"""
 #|%%--%%| <MOr4UkMIAG|BRyO520dwq>
 
+
+import seaborn as sns
+
+sns.displot(J, hist=True, kde=True,
+             bins=200, color = 'darkblue',
+             hist_kws={'edgecolor':'black'},
+             kde_kws={'linewidth': 4})
 
 figure, subplot = plt.subplots(len(regions), len(regions), sharex = True, sharey = True)
 plt.suptitle("Before training")
