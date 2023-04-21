@@ -11,11 +11,11 @@ This notebook has been built following:
 * [The CURBD tool](https://github.com/rajanlab/CURBD)
 * The notebooks provided by Rajan Lab at this [link](https://www.rajanlab.com/cosyne2021)
 °°°"""
-#|%%--%%| <NEH5SUEzp5|J1RTFC9q80>
+# |%%--%%| <NEH5SUEzp5|J1RTFC9q80>
 r"""°°°
 # Importing libraries
 °°°"""
-#|%%--%%| <J1RTFC9q80|AZwMTYFGUW>
+# |%%--%%| <J1RTFC9q80|AZwMTYFGUW>
 
 import numpy as np #Vector and matrix operations
 import matplotlib.pyplot as plt #Plotting
@@ -98,8 +98,11 @@ init_synapses(n_neurons)
 # |%%--%%| <tZpgGDHTAA|DHjIt9fgCu>
 
 #Plotting the synapse's matrix
-figure, subplot = plt.subplots(1, figsize=(10, 5))
-subplot.imshow(init_synapses(n_neurons))
+figure, subplot = plt.subplots(1)
+subplot.imshow(init_synapses(n_neurons), aspect = 'equal')
+subplot.set_xlabel("Source neuron")
+subplot.set_ylabel("Target neuron")
+subplot.set_title("Synapses strengths")
 
 # |%%--%%| <DHjIt9fgCu|N2x7xaeO4F>
 r"""°°°
@@ -133,20 +136,24 @@ I = compute_input(300, tau_input, scale_input, dt, 12)
 # |%%--%%| <Qcda8uk2iM|c0YKNrAEh4>
 
 #Plotting the input coming to a single neuron
-figure, subplot = plt.subplots(1, figsize=(10, 5))
+figure, subplot = plt.subplots(1)
 
-subplot.plot(I[0, :])
-subplot.set_xlabel("Time steps")
-subplot.set_ylabel("Input current")
+subplot.plot(
+        np.arange(0, 12, dt),
+        I[0, :])
+subplot.set_xlabel("Time [s]")
+subplot.set_ylabel("Input current [mA]")
+subplot.set_title("Input current to a single neuron")
 
 # |%%--%%| <c0YKNrAEh4|FwK2GquHuk>
 
 #Plotting the input coming to all the neurons
-figure, subplot = plt.subplots(1, figsize=(10, 5))
+figure, subplot = plt.subplots(1)
 
-subplot.imshow(I, aspect = 'auto')
-subplot.set_xlabel("Time steps")
+subplot.imshow(I, extent = [0, 12, 0, n_neurons], aspect = 'auto')
+subplot.set_xlabel("Time [s]")
 subplot.set_ylabel("Neurons")
+subplot.set_title("Input current to all neurons")
 
 # |%%--%%| <FwK2GquHuk|rkJqlKN2rh>
 r"""°°°
@@ -173,7 +180,7 @@ phi = np.tanh
 #Plotting the activation function
 x = np.linspace(-5, 5, 1000)
 y = phi(x)
-figure, subplot = plt.subplots(1, figsize=(10, 5))
+figure, subplot = plt.subplots(1)
 subplot.spines['left'].set_position('center')
 subplot.spines['bottom'].set_position('center')
 subplot.spines['right'].set_color('none')
@@ -186,7 +193,7 @@ subplot.plot(x, y)
 # |%%--%%| <fcbTSOnoRZ|nsVBtXprrj>
 
 #Plotting the activation function's derivative
-figure, subplot = plt.subplots(1, figsize=(10, 5))
+figure, subplot = plt.subplots(1)
 subplot.spines['left'].set_position('center')
 subplot.spines['bottom'].set_position('center')
 subplot.spines['right'].set_color('none')
@@ -379,6 +386,9 @@ x_bump = compute_x_bump(10, 0.01, 100, 0.1, -10)
 test = sequence_driving_network(x_bump, 0.01, 2)
 figure, subplot = plt.subplots(1)
 plt.pcolormesh(np.arange(0, 12, 0.01), np.arange(0, 100), test)
+subplot.set_xlabel("Time [s]")
+subplot.set_ylabel("Neurons")
+subplot.set_title("Sequence driving network")
 
 # |%%--%%| <UK5W1tRRRH|gy9STCGxnN>
 r"""°°°
@@ -409,13 +419,15 @@ def fixed_point_driver(xbump, sim_time, lead_time, dt, n_neurons, cutoff_traslat
     y_fp = np.concatenate((newmat, y_fp), axis=1)
     return y_fp
 
-
 # |%%--%%| <Mi4GDataJz|XSIfrLRk46>
 
 #Plot of an example of fixed point driver
 test = fixed_point_driver(x_bump, 12, 2, 0.01, 100, -10, 10, 300)
 figure, subplot = plt.subplots(1)
 plt.pcolormesh(np.arange(0, 12, 0.01), np.arange(0, 100), test)
+subplot.set_xlabel("Time [s]")
+subplot.set_ylabel("Neurons")
+subplot.set_title("Fixed point driving network")
 
 # |%%--%%| <XSIfrLRk46|ns2PdFjA1O>
 r"""°°°
@@ -448,14 +460,21 @@ def intra_region_connectivity(n_neurons, g):
 J_a = intra_region_connectivity(100, 1.8)
 J_b = intra_region_connectivity(100, 1.5)
 J_c = intra_region_connectivity(100, 1.5)
+plt.rcParams.update({'font.size': 12})
 
-figure, subplot = plt.subplots(1, 3)
-subplot[0].imshow(J_a, aspect = 'auto')
+figure, subplot = plt.subplots(1, 3, layout = 'tight')
+subplot[0].imshow(J_a, aspect = 'equal')
 subplot[0].set_title("RNN-A synaptic strenght")
-subplot[1].imshow(J_b, aspect = 'auto')
+subplot[0].set_ylabel("Neurons")
+subplot[0].set_xlabel("Neurons")
+subplot[1].imshow(J_b, aspect = 'equal')
 subplot[1].set_title("RNN-B synaptic strenght")
-subplot[2].imshow(J_c, aspect = 'auto')
+subplot[1].set_ylabel("Neurons")
+subplot[1].set_xlabel("Neurons")
+subplot[2].imshow(J_c, aspect = 'equal')
 subplot[2].set_title("RNN-C synaptic strenght")
+subplot[2].set_ylabel("Neurons")
+subplot[2].set_xlabel("Neurons")
 
 # |%%--%%| <Q0M8UfFt7V|XC1z8bZenO>
 r"""°°°
@@ -463,7 +482,6 @@ r"""°°°
 The number of connection is controlled by the `frac_inter_reg`, which controls the percentage of connected neurons
 °°°"""
 # |%%--%%| <XC1z8bZenO|R9NUMkejtt>
-
 
 #Returns the array source_neurons of the neurons
 #in the source population, where source_neurons[i] = 1 if
@@ -664,18 +682,22 @@ connections['C'] = {
 # |%%--%%| <NQycjuSucJ|rZFkp6Bip5>
 
 #Plotting the input currents
-figure, subplots = plt.subplots(1, 2)
+figure, subplots = plt.subplots(1, 2, layout = 'tight')
 subplots[0].pcolormesh(
         np.arange(0, data_params['sim_time'], data_params['dt']),
         np.arange(0, data_params['n_neurons_B']),
         data['sequential'])
 subplots[0].set_title("Sequential driver inputted in B")
+subplots[0].set_xlabel("Time (s)")
+subplots[0].set_ylabel("Neuron")
 
 subplots[1].pcolormesh(
         np.arange(0, data_params['sim_time'], data_params['dt']),
         np.arange(0, data_params['n_neurons_C']),
         data['fixed'])
 subplots[1].set_title("Fixed point driver inputted in C")
+subplots[0].set_xlabel("Time (s)")
+subplots[0].set_ylabel("Neuron")
 
 # |%%--%%| <rZFkp6Bip5|n7VzpFQee9>
 r"""°°°
@@ -741,35 +763,42 @@ experimental_data = experimental_data/experimental_data.max()
 experimental_data = np.minimum(experimental_data, 0.999)
 experimental_data = np.maximum(experimental_data, -0.999)
 
-#|%%--%%| <TmsjrC0XQK|5Y2cgD9MYR>
+# |%%--%%| <TmsjrC0XQK|5Y2cgD9MYR>
 r"""°°°
 ### Plotting the obtained experimental data
 °°°"""
-#|%%--%%| <5Y2cgD9MYR|wJhF1C1F1c>
+# |%%--%%| <5Y2cgD9MYR|wJhF1C1F1c>
 
 def plot_region(data_params, data, region):
-    figure, subplots = plt.subplots(1, 3)
-    figure.tight_layout()
-    figure.subplots_adjust(hspace = 0.4, wspace = 0.3)
+    figure, subplots = plt.subplots(1, 3, layout = 'tight')
     subplots[0].pcolormesh(
             np.arange(0, data_params['sim_time'], data_params['dt']),
             np.arange(0, data_params[f'n_neurons_{region}']),
             data[region]
             )
+    subplots[0].set_title("Neural activity")
+    subplots[0].set_xlabel("Time (s)")
+    subplots[0].set_ylabel("Neuron")
 
     subplots[1].pcolormesh(
-            np.arange(0, data_params['n_neurons_A']),
-            np.arange(0, data_params['n_neurons_A']),
+            np.arange(0, data_params[f'n_neurons_{region}']),
+            np.arange(0, data_params[f'n_neurons_{region}']),
                       connections[region][region]['J']
                       )
+    subplots[1].set_title("Synapses strenght")
+    subplots[1].set_xlabel("Time (s)")
+    subplots[1].set_ylabel("Neuron")
 
     #Some example neurons
     for _ in range(3):
-        idx = npr.randint(0, data_params['n_neurons_A'] - 1)
+        idx = npr.randint(0, data_params[f'n_neurons_{region}'] - 1)
         subplots[2].plot(
                 np.arange(0, data_params['sim_time'], data_params['dt']),
                 data[region][idx, :],
                 )
+    subplots[2].set_title("Neuron behaviur")
+    subplots[2].set_xlabel("Time (s)")
+    subplots[2].set_ylabel("Activity")
 
 # |%%--%%| <wJhF1C1F1c|bAuUQSglLX>
 
@@ -876,17 +905,40 @@ def run(neurons, J, H, P, experimental_data, sim_param, training = True):
 # |%%--%%| <rFaUgGvzDZ|8KJcrkXPhD>
 
 #An example of a network run with training disabled (no updating of J)
-test, J, P, chi2 = run(neurons, J, H, P, experimental_data, sim_param, training = False)
+non_trained, J, P, chi2 = run(neurons, J, H, P, experimental_data, sim_param, training = False)
 distance = np.linalg.norm(experimental_data - test[:, [i*5 for i in range(experimental_data.shape[1])]])
 pvar = 1 - (distance / (math.sqrt(300 * 1200)) * np.std(experimental_data)) ** 2
 print(chi2, pvar)
 
 # |%%--%%| <8KJcrkXPhD|i7GbUE3XAW>
 
-figure, subplots = plt.subplots(1, 3)
-subplots[0].imshow(test, aspect = 'auto')
-subplots[1].imshow(experimental_data, aspect = 'auto')
-random_neuron_index = npr.choice(target_neurons)
+figure, subplots = plt.subplots(1, 3, layout = 'tight')
+subplots[0].imshow(
+        test,
+        extent = [
+            0,
+            sim_param['sim_time'],
+            0,
+            sim_param['n_neurons']
+            ],
+        aspect = 'auto'
+        )
+subplots[0].set_title("Simulated activity")
+subplots[0].set_xlabel("Time (s)")
+subplots[0].set_ylabel("Neuron")
+subplots[1].imshow(
+        experimental_data,
+        extent = [
+            0,
+            sim_param['sim_time'],
+            0,
+            sim_param['n_neurons']
+            ],
+        aspect = 'auto')
+subplots[1].set_title("Experimental activity")
+subplots[1].set_xlabel("Time (s)")
+subplots[1].set_ylabel("Neuron")
+random_neuron_index = npr.choice(np.arange(0, sim_param['n_neurons'])
 subplots[2].plot(
         np.arange(0, sim_param['sim_time'], sim_param['data_dt']),
         experimental_data[random_neuron_index, :],
@@ -897,13 +949,18 @@ subplots[2].plot(
         test[random_neuron_index, :],
         label = 'simulated'
         )
+subplots[2].legend(bbox_to_anchor=(0.00, 0., 1., .102))
+subplots[2].set_ylim(-1,1)
+subplots[2].set_title("Neuron " + str(random_neuron_index))
+subplots[2].set_xlabel("Time (s)")
+subplots[2].set_ylabel("Activity")
 
 # |%%--%%| <i7GbUE3XAW|54L3Vlhdwl>
 
-def plot_train_evolution(figure, subplots, chi2s, pvars, neuron_index, state, experimental_data, plots):
+def plot_train_evolution(figure, subplots, chi2s, pvars, neuron_index, state, experimental_data, plots, sim_param):
     if not figure:
         plt.ion()
-        figure, subplots = plt.subplots(2, 3)
+        figure, subplots = plt.subplots(2, 3, layout = 'tight')
         plots['exp_neuron'], = subplots[0, 2].plot(
                 np.arange(0, sim_param['sim_time'], sim_param['data_dt']),
                 experimental_data[neuron_index, :],
@@ -916,25 +973,51 @@ def plot_train_evolution(figure, subplots, chi2s, pvars, neuron_index, state, ex
                 )
         subplots[0,2].legend()
         subplots[0,2].set_ylim(-1,1)
-        plots['state'] = subplots[0, 0].imshow(state, aspect = 'auto')
-        subplots[0, 1].imshow(experimental_data, aspect = 'auto')
+        plots['state'] = subplots[0, 0].imshow(
+                state,
+                extent = [
+                    0,
+                    sim_param['sim_time'],
+                    0,
+                    sim_param['n_neurons']
+                    ],
+                aspect = 'auto'
+                )
+        subplots[0, 1].imshow(
+                experimental_data,
+                extent = [
+                    0,
+                    sim_param['sim_time'],
+                    0,
+                    sim_param['n_neurons']
+                    ],
+                aspect = 'auto'
+                )
         plots['chi2'], = subplots[1, 0].plot(chi2s)
         plots['pvars'], = subplots[1, 1].plot(pvars)
         subplots[1, 2].set_visible(False)
-        subplots[1, 0].set_position([0.24,0.125,0.228,0.343])
-        subplots[1, 1].set_position([0.55,0.125,0.228,0.343])
 
-    subplots[0,0].set_title("Simulated neurons activation")
-    subplots[0,1].set_title("Experimental neurons activation")
-    subplots[0,2].set_title("Neuron {}".format(neuron_index))
+        subplots[0, 0].set_title("Simulated neurons")
+        subplots[0, 0].set_xlabel("Time (s)")
+        subplots[0, 0].set_ylabel("Neuron")
+        subplots[0, 1].set_title("Experimental neurons")
+        subplots[0, 1].set_xlabel("Time (s)")
+        subplots[0, 1].set_ylabel("Neuron")
+        subplots[0, 2].set_title("Neuron {}".format(neuron_index))
+        subplots[0, 2].set_xlabel("Time (s)")
+        subplots[0, 2].set_ylabel("Activity")
+        subplots[1, 0].set_title(r"$chi^2$")
+        subplots[1, 0].set_xlabel("Iteration")
+        subplots[1, 0].set_ylabel(r"$chi^2$")
+        subplots[1, 1].set_title("pvar")
+        subplots[1, 1].set_xlabel("Iteration")
+        subplots[1, 1].set_ylabel("pvar")
 
     plots['sim_neuron'].set_ydata(state[random_neuron_index, :])
     plots['exp_neuron'].set_ydata(experimental_data[random_neuron_index, :])
     plots['state'].set_data(state)
     subplots[1, 0].plot(chi2s, c = 'g')
-    subplots[1, 0].set_title("chi2")
     subplots[1, 1].plot(pvars, c = 'g')
-    subplots[1, 1].set_title("pvar")
 
     figure.canvas.draw()
     figure.canvas.flush_events()
@@ -942,17 +1025,32 @@ def plot_train_evolution(figure, subplots, chi2s, pvars, neuron_index, state, ex
     return figure, subplots, plots
 
 
-def network_train(neurons, J_in, H_in, P_in, experimental_data, sim_param, plot = False):
+def met_stopping_condition(stopping_condition, epoch, chi2, pvar):
+    stop = False
+    for name in stopping_condition:
+        if name == 'chi2':
+            stop = stop or chi2 < stopping_condition[name]
+        elif name == 'pvar':
+            stop = stop or pvar > stopping_condition[name]
+        elif name == 'epochs':
+            stop = stop or epoch > stopping_condition[name]
+        elif name == 'custom':
+            stop = stop or stopping_condition[name]
+    return stop
+
+
+def network_train(neurons, J_in, H_in, P_in, experimental_data, sim_param, stopping_condition, plot = False):
     J = J_in.copy()
     H = H_in.copy()
     P = P_in.copy()
     state = None
     chi2s = []
     pvars = []
-    i = 0
+    epoch = 0
     figure, subplots, plots = None, None, {}
     random_neuron_index = npr.choice(target_neurons)
-    while i < 500:
+    stop = False
+    while not stop:
         state, J, P, chi2 = run(neurons, J, H, P, experimental_data, sim_param)
         distance = np.linalg.norm(experimental_data - state[:, [i*5 for i in range(experimental_data.shape[1])]])
         pvar = 1 - (distance / (math.sqrt(300 * 1200)) * np.std(experimental_data)) ** 2
@@ -969,14 +1067,19 @@ def network_train(neurons, J_in, H_in, P_in, experimental_data, sim_param, plot 
                     state,
                     experimental_data,
                     plots,
+                    sim_param
                     )
 
-        i += 1
+        epoch += 1
+        stop = met_stopping_condition(stopping_condition, epoch, chi2, pvar)
+
     return state, J, P, chi2s, pvars
 
+# |%%--%%| <54L3Vlhdwl|6gHScWGyvc>
 
-#|%%--%%| <54L3Vlhdwl|6gHScWGyvc>
-
+stopping_condition = {
+        'epochs' : 500,
+        }
 simulated_data, final_J, final_P, chi2s, pvars = network_train(
         neurons,
         J,
@@ -984,15 +1087,16 @@ simulated_data, final_J, final_P, chi2s, pvars = network_train(
         P,
         experimental_data,
         sim_param,
+        stopping_condition,
         plot = True
         )
 
-#|%%--%%| <6gHScWGyvc|ieMJ1JgqoE>
+# |%%--%%| <6gHScWGyvc|ieMJ1JgqoE>
 r"""°°°
 # Analysis of the results
 Having now provided a framework for building an in-silico replica of the dynamics of the neurons recorded during an experiment, we'll explore what properties can be inferred from the simulation.
 °°°"""
-#|%%--%%| <ieMJ1JgqoE|2gWTGSRMtN>
+# |%%--%%| <ieMJ1JgqoE|2gWTGSRMtN>
 r"""°°°
 ## CURBD - Current based decomposition of multi-region datasets
 The current into any one target neurons is the sum of the activities of all the neurons in the network scaled by the respective interaction weights:
@@ -1006,7 +1110,7 @@ This is done by dividing the matrix $J$ into $M^2$ sub-matrices, where $M$ is th
 
 The separation of currents can be considered as a decomposition of the activity of the target-region neurons based on the relative contributions of each source one.
 °°°"""
-#|%%--%%| <2gWTGSRMtN|fqZf3T5pfG>
+# |%%--%%| <2gWTGSRMtN|fqZf3T5pfG>
 
 regions = {
         'A' : np.arange(
@@ -1023,7 +1127,7 @@ regions = {
             ),
         }
 
-#|%%--%%| <fqZf3T5pfG|tVxTVrs8n5>
+# |%%--%%| <fqZf3T5pfG|tVxTVrs8n5>
 
 def curbd(simulated_activity, J, regions, current_type):
     new_J = J.copy()
@@ -1046,23 +1150,24 @@ def curbd(simulated_activity, J, regions, current_type):
 
     return curbd
 
-
-#|%%--%%| <tVxTVrs8n5|j4Cqxy8nuX>
+# |%%--%%| <tVxTVrs8n5|j4Cqxy8nuX>
 
 curbd_res = curbd(test, final_J, regions, current_type = 'all')
 
-figure, subplot = plt.subplots(len(regions), len(regions))
+figure, subplot = plt.subplots(len(regions), len(regions), layout = 'tight')
 for (i, region) in enumerate(curbd_res):
     subplot_col = i // len(regions)
     subplot_row = i % len(regions)
     subplot[subplot_col, subplot_row].pcolormesh(
+            np.arange(0, sim_param['sim_time'], sim_param['dt']),
+            regions[region.split()[-1]],
             curbd_res[region],
             )
     subplot[subplot_col, subplot_row].set_xlabel("Time (s)")
     subplot[subplot_col, subplot_row].set_ylabel(f"Neurons in {region.split()[-1]}")
     subplot[subplot_col, subplot_row].set_title(f"Current into {region.split()[-1]} from {region.split()[0]}")
 
-#|%%--%%| <j4Cqxy8nuX|N7QJYzw5Zo>
+# |%%--%%| <j4Cqxy8nuX|N7QJYzw5Zo>
 r"""°°°
 ## State space analysis
 The state space analysis is based on principal component analysis and allows to describe the istantaneous network state.
@@ -1071,48 +1176,86 @@ The output of the training is fitted in a PCA and the eigenvalues of the corresp
 
 This allows to define an effective dimensionality of the activity $N_{eff}$ as the number of prncipal components that capture $90\%$ of the variance in the dynamics.
 °°°"""
-#|%%--%%| <N7QJYzw5Zo|kXwB3kD25H>
+#|%%--%%| <N7QJYzw5Zo|naP0UJ7Wgi>
+
+def pca_analysis(data, n_components):
+    pca = PCA(n_components)
+    pca.fit(data.T)
+    proj = pca.transform(data.T)
+    cum_explained_variance_ratio = pca.explained_variance_ratio_.cumsum()
+    return proj, cum_explained_variance_ratio
+
+# |%%--%%| <naP0UJ7Wgi|kXwB3kD25H>
 
 n_components = 50
 
-pca = PCA(n_components)
-pca.fit(simulated_data.T)
-proj = pca.transform(simulated_data.T)
-cum_explained_variance_ratio_simulated = pca.explained_variance_ratio_.cumsum()
-figure, subplot = plt.subplots(1, 2, subplot_kw = {'projection' : '3d'})
-subplot[0].plot(proj[:, 0], proj[:, 1], proj[:, 2])
+simulated_projections, cum_variance_simulated = pca_analysis(
+        simulated_data,
+        n_components,
+        )
 
-pca = PCA(n_components)
-pca.fit(experimental_data.T)
-proj = pca.transform(experimental_data.T)
-cum_explained_variance_ratio_experimental = pca.explained_variance_ratio_.cumsum()
+experimental_projections, cum_variance_experimental = pca_analysis(
+        experimental_data,
+        n_components,
+        )
 
-subplot[1].plot(proj[:, 0], proj[:, 1], proj[:, 2])
+non_trained_projections, cum_variance_non_trained = pca_analysis(
+        non_trained,
+        n_components,
+        )
 
-#|%%--%%| <kXwB3kD25H|HRnhrkYEtj>
+#|%%--%%| <kXwB3kD25H|wB0SnvjVb6>
 
-figure, subplot = plt.subplots(1, 2)
-subplot[0].plot(cum_explained_variance_ratio_simulated)
+
+figure, subplot = plt.subplots(1, 3, subplot_kw = {'projection' : '3d'}, layout = 'tight')
+
+subplot[0].plot(non_trained_projections[:, 0], non_trained_projections[:, 1], non_trained_projections[:, 2])
+subplot[0].set_title("Non trained simulated data")
+
+subplot[1].plot(simulated_projections[:, 0], simulated_projections[:, 1], simulated_projections[:, 2])
+subplot[1].set_title("Simulated data")
+
+
+subplot[2].plot(experimental_projections[:, 0], experimental_projections[:, 1], experimental_projections[:, 2])
+subplot[2].set_title("Experimental data")
+
+# |%%--%%| <wB0SnvjVb6|HRnhrkYEtj>
+
+figure, subplot = plt.subplots(1, 3, layout = 'tight')
+subplot[0].plot(cum_variance_non_trained)
 subplot[0].axhline(0.9, color = 'red', ls = '--')
-subplot[1].plot(cum_explained_variance_ratio_experimental)
+subplot[0].set_title("Non trained simulated data")
+subplot[0].set_xlabel("Number of principal components")
+subplot[0].set_ylabel("Variance")
+subplot[1].plot(cum_variance_simulated)
 subplot[1].axhline(0.9, color = 'red', ls = '--')
+subplot[1].set_title("Trained simulated data")
+subplot[1].set_xlabel("Number of principal components")
+subplot[1].set_ylabel("Variance")
+subplot[2].plot(cum_variance_experimental)
+subplot[2].axhline(0.9, color = 'red', ls = '--')
+subplot[2].set_title("Experimental data")
+subplot[2].set_xlabel("Number of principal components")
+subplot[2].set_ylabel("Variance")
 
-#|%%--%%| <HRnhrkYEtj|VaRbUleOkX>
+# |%%--%%| <HRnhrkYEtj|VaRbUleOkX>
 
-sim = np.searchsorted(cum_explained_variance_ratio_simulated, 0.9)
-exp = np.searchsorted(cum_explained_variance_ratio_experimental, 0.9)
-print(f"Number of principal components in the simulation such that the captured variance is greater than 90%: {sim}")
+#searchsorted stops at the first occurrence of a value > 0.9
+non_train_sim = np.searchsorted(cum_variance_non_trained, 0.9)
+sim = np.searchsorted(cum_variance_simulated, 0.9)
+exp = np.searchsorted(cum_variance_experimental, 0.9)
+print(f"Number of principal components in the simulation without training such that the captured variance is greater than 90%: {non_train_sim}")
+print(f"Number of principal components in the simulation  with training such that the captured variance is greater than 90%: {sim}")
 print(f"Number of principal components in the experiment such that the captured variance is greater than 90%: {exp}")
 
-#|%%--%%| <VaRbUleOkX|MOr4UkMIAG>
+# |%%--%%| <VaRbUleOkX|MOr4UkMIAG>
 r"""°°°
 ## Effective connectivity
 The matrix $J$ of connectivity strenghts allow to describe the strength of connectivity between regions.
 
 Plotting the hitogram of values of $J$ in a specific sub-region allow to infer how they are connected.
 °°°"""
-#|%%--%%| <MOr4UkMIAG|BRyO520dwq>
-
+# |%%--%%| <MOr4UkMIAG|BRyO520dwq>
 
 import seaborn as sns
 
@@ -1132,14 +1275,13 @@ for (i, source) in enumerate(regions):
         subplot[i, j].set_title(f"{source} -> {target}")
         subplot[i, j].set_yscale('log')
 
-#|%%--%%| <BRyO520dwq|gl5hbPUQEU>
-
+# |%%--%%| <BRyO520dwq|gl5hbPUQEU>
 
 figure, subplot = plt.subplots(len(regions), len(regions), sharex = True, sharey = True)
 figure.suptitle("After training")
 for (i, source) in enumerate(regions):
     for (j, target) in enumerate(regions):
-        sns.distplot(final_J[regions[source], :][:, regions[target]],
+        sns.distplot(J[regions[source], :][:, regions[target]],
                      hist=True,
                      kde=True,
                      bins=200,
