@@ -23,3 +23,5 @@ Which can be run locally via [Jupyter notebook](https://jupyter.org/) or on the 
 * [Machine learning](https://github.com/giacThePhantom/DataMining/blob/master/build/principal.pdf) A more in-depth mathematical discussion of various machine learning methods.
 
 * [3Blue1Brown series](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi) A beautifully animated video introduction to neural networks.
+
+* [Mathematical discussion on backpropagation](https://brilliant.org/wiki/backpropagation/)
