@@ -906,7 +906,7 @@ def run(neurons, J, H, P, experimental_data, sim_param, training = True):
 
 #An example of a network run with training disabled (no updating of J)
 non_trained, J, P, chi2 = run(neurons, J, H, P, experimental_data, sim_param, training = False)
-distance = np.linalg.norm(experimental_data - test[:, [i*5 for i in range(experimental_data.shape[1])]])
+distance = np.linalg.norm(experimental_data - non_trained[:, [i*5 for i in range(experimental_data.shape[1])]])
 pvar = 1 - (distance / (math.sqrt(300 * 1200)) * np.std(experimental_data)) ** 2
 print(chi2, pvar)
 
@@ -1013,8 +1013,8 @@ def plot_train_evolution(figure, subplots, chi2s, pvars, neuron_index, state, ex
         subplots[1, 1].set_xlabel("Iteration")
         subplots[1, 1].set_ylabel("pvar")
 
-    plots['sim_neuron'].set_ydata(state[random_neuron_index, :])
-    plots['exp_neuron'].set_ydata(experimental_data[random_neuron_index, :])
+    plots['sim_neuron'].set_ydata(state[neuron_index, :])
+    plots['exp_neuron'].set_ydata(experimental_data[neuron_index, :])
     plots['state'].set_data(state)
     subplots[1, 0].plot(chi2s, c = 'g')
     subplots[1, 1].plot(pvars, c = 'g')
@@ -1152,7 +1152,7 @@ def curbd(simulated_activity, J, regions, current_type):
 
 # |%%--%%| <tVxTVrs8n5|j4Cqxy8nuX>
 
-curbd_res = curbd(test, final_J, regions, current_type = 'all')
+curbd_res = curbd(simulated_data, final_J, regions, current_type = 'all')
 
 figure, subplot = plt.subplots(len(regions), len(regions), layout = 'tight')
 for (i, region) in enumerate(curbd_res):
@@ -1176,7 +1176,7 @@ The output of the training is fitted in a PCA and the eigenvalues of the corresp
 
 This allows to define an effective dimensionality of the activity $N_{eff}$ as the number of prncipal components that capture $90\%$ of the variance in the dynamics.
 °°°"""
-#|%%--%%| <N7QJYzw5Zo|naP0UJ7Wgi>
+# |%%--%%| <N7QJYzw5Zo|naP0UJ7Wgi>
 
 def pca_analysis(data, n_components):
     pca = PCA(n_components)
@@ -1204,8 +1204,7 @@ non_trained_projections, cum_variance_non_trained = pca_analysis(
         n_components,
         )
 
-#|%%--%%| <kXwB3kD25H|wB0SnvjVb6>
-
+# |%%--%%| <kXwB3kD25H|wB0SnvjVb6>
 
 figure, subplot = plt.subplots(1, 3, subplot_kw = {'projection' : '3d'}, layout = 'tight')
 
@@ -1281,7 +1280,7 @@ figure, subplot = plt.subplots(len(regions), len(regions), sharex = True, sharey
 figure.suptitle("After training")
 for (i, source) in enumerate(regions):
     for (j, target) in enumerate(regions):
-        sns.distplot(J[regions[source], :][:, regions[target]],
+        sns.distplot(final_J[regions[source], :][:, regions[target]],
                      hist=True,
                      kde=True,
                      bins=200,
@@ -1291,8 +1290,3 @@ for (i, source) in enumerate(regions):
                         ax=subplot[i, j])
         subplot[i, j].set_title(f"{source} -> {target}")
         subplot[i, j].set_yscale('log')
-subplots[2].plot(
-        np.arange(0, sim_param['sim_time'], sim_param['data_dt']),
-        experimental_data[random_neuron_index, :],
-        label = 'experimental'
-        )

@@ -549,6 +549,7 @@ def threeRegionSim(number_units=100,
     return out
 
 
+
 def computeCURBD(sim):
     """
     function [CURBD,CURBDLabels] = computeCURBD(varargin)
