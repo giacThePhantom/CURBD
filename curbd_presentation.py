@@ -906,7 +906,9 @@ def run(neurons, J, H, P, experimental_data, sim_param, training = True):
 
 #An example of a network run with training disabled (no updating of J)
 non_trained, J, P, chi2 = run(neurons, J, H, P, experimental_data, sim_param, training = False)
-distance = np.linalg.norm(experimental_data - non_trained[:, [i*5 for i in range(experimental_data.shape[1])]])
+distance = np.linalg.norm(
+        experimental_data - non_trained[:, [
+            int(i * sim_param['data_dt'] / sim_param['dt']) for i in range(experimental_data.shape[1])]])
 pvar = 1 - (distance / (math.sqrt(300 * 1200)) * np.std(experimental_data)) ** 2
 print(chi2, pvar)
 
@@ -938,7 +940,7 @@ subplots[1].imshow(
 subplots[1].set_title("Experimental activity")
 subplots[1].set_xlabel("Time (s)")
 subplots[1].set_ylabel("Neuron")
-random_neuron_index = npr.choice(np.arange(0, sim_param['n_neurons'])
+random_neuron_index = npr.choice(np.arange(0, sim_param['n_neurons']))
 subplots[2].plot(
         np.arange(0, sim_param['sim_time'], sim_param['data_dt']),
         experimental_data[random_neuron_index, :],
@@ -946,7 +948,7 @@ subplots[2].plot(
         )
 subplots[2].plot(
         np.arange(0, sim_param['sim_time'], sim_param['dt']),
-        test[random_neuron_index, :],
+        non_trained[random_neuron_index, :],
         label = 'simulated'
         )
 subplots[2].legend(bbox_to_anchor=(0.00, 0., 1., .102))
@@ -1052,7 +1054,8 @@ def network_train(neurons, J_in, H_in, P_in, experimental_data, sim_param, stopp
     stop = False
     while not stop:
         state, J, P, chi2 = run(neurons, J, H, P, experimental_data, sim_param)
-        distance = np.linalg.norm(experimental_data - state[:, [i*5 for i in range(experimental_data.shape[1])]])
+        distance = np.linalg.norm(
+                experimental_data - state[:, [int(i * sim_param['data_dt'] / sim_param['dt']) for i in range(experimental_data.shape[1])]])
         pvar = 1 - (distance / (math.sqrt(300 * 1200)) * np.std(experimental_data)) ** 2
         chi2s.append(chi2)
         pvars.append(pvar)
@@ -1078,7 +1081,7 @@ def network_train(neurons, J_in, H_in, P_in, experimental_data, sim_param, stopp
 # |%%--%%| <54L3Vlhdwl|6gHScWGyvc>
 
 stopping_condition = {
-        'epochs' : 500,
+        'pvar' : 0.9999,
         }
 simulated_data, final_J, final_P, chi2s, pvars = network_train(
         neurons,
